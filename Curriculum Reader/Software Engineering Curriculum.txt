@@ -1,0 +1,77 @@
+Required Courses:						Prerequisites:
+
+First Year - Semester I:
+Calculus I: MATE3031 - 4					NONE
+General Chemistry I: QUIM3131 - 3				NONE
+General Chemistry Lab I: QUIM3133 - 1				NONE
+Intermediate English I: INGL3103 - 3				NONE
+Basic Spanish I: ESPA3101 - 3					NONE
+Introduction to Computer Programming: CIIC3011 - 3		NONE
+
+First Year - Semester II:
+Calculus II: MATE3032 - 4					MATE3031
+General Chemistry II: QUIM3132 - 3				QUIM3131
+General Chemistry Lab II: QUIM3134 - 1				QUIM3133
+Intermediate English II: INGL3104 - 3				INGL3103
+Basic Spanish II: ESPA3102 - 3					ESPA3101
+Advanced Programming: CIIC4010 - 4				CIIC3011
+
+Second Year - Semester I:
+Calculus III: MATE3063 - 3					MATE3032
+Physics I: FISI3171 - 4						MATE3031
+Physics Lab I: FIIS3173 - 1					FISI3171(Co-requisite)
+Engineering Graphics: INGE3011 - 2				NONE
+Foundations of Computing: CIIC3075 - 3				CIIC3011
+English Second Year I: INGLXXXX - 3				INGL3104
+
+Second Year - Semester II:
+Data Structures: CIIC4020 - 4					CIIC4010 & CIIC3075
+Physics II: FISI3172 - 4					FISI3171
+Physics Lab II: FISI3174 - 1					FISI3173 & FISI3172(Co-requisite)
+Electrical Systems Analysis I: INEL3105 - 3			MATE3032, FISI3172(Co-requisite) & MATE3063(Co-requisite)
+Electircal Measurements Lab: INEL4115 - 1			INEL3105 (Co-requisite)
+English Second Year II: INGLXXXX - 3				INGL3104
+
+Third Year - Semester I:
+Introduction to Software Engineering: INSO4101 - 3		CIIC4020
+Computer Archietecture I: CIIC3081 - 3				INEL3105 & CIIC4010
+Lineal Algebra and Differential Equations: MATE4145 - 4		MATE3063 & CIIC3011
+Engineering Mechanics: INGE3035 - 3				MATE3031
+SOCIO-HUMANISTIC ELECTIVE: - 3					NONE
+
+Third Year - Semester II:
+Algorithm Design and Analysis: CIIC4025 - 3			CIIC4020
+Computer Archietecture II: CIIC4082 - 3				CIIC3081		
+Software Requirements: INSO4115 - 3				INSO4101
+Engineering Probability and Statistics: ININ4010 - 3		CIIC3011 & MATE3032
+SOCIO-HUMANISTIC ELECTIVE: - 3					NONE
+
+Fourth Year - Semester I:
+Operating Systems: CIIC4050 - 4					CIIC4020 & CIIC4082
+Programming Languages: CIIC4030 - 3				CIIC4020
+Software Design: INSO4116 - 3					INSO4115
+Engineering Economics: ININ4015 - 3				MATE3032
+SOCIO-HUMANISTIC ELECTIVE: - 3					NONE
+
+Fourth Year - Semester II:
+Database Systems: CIIC4060 - 3					CIIC4020 & CIIC4050(Co-requisite)
+Computer Networks and the WWW: CIIC4070 - 3			CIIC4050
+Software Testing: INSO4117 - 3					INSO4116
+Thermodinamics: INME4045 - 3					FISI3172, QUIM3132 & QUIM3134
+SOCIO-HUMANISTIC ELECTIVE: - 3					NONE
+
+Fifth Year - Semester I:
+Software Engineering Project: INSO4151 - 3			INSO4117
+Engineering Matrials: INGE3045 - 3				QUIM3132, QUIM3134 & FISI3172 (Co-requisite)
+Free Elective: FREEXXXX - 3					NONE
+Free Elective: FREEXXXX - 3					NONE
+Physical Education Elective: EDFIXXXX - 1			NONE
+
+Fifth Year - Semester II:
+Technical Elective: INSOXXXX - 3				NONE
+Technical Elective:INSOXXXX - 3					NONE
+Free Elective: FREEXXXX - 3					NONE
+Free Elective: FREEXXXX - 3					NONE
+Physical Education Elective: EDFIXXXX - 1			NONE
+
+Taken Courses:
