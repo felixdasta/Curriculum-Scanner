@@ -7,7 +7,9 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.LinkedList;
+import java.util.Map;
 import java.util.Scanner;
 
 import javax.swing.JButton;
@@ -28,6 +30,7 @@ public class CurriculumData implements ActionListener, ItemListener{
 	private LinkedList<String>semesterSelection;
 	private ArrayList<String>takenCourses;
 	private ArrayList<LinkedList<String>>individualSemesters;
+	private Map<String, ArrayList<String>> prerequisites;
 	private JFrame frame;
 	private JComboBox <String>selectedSemester;
 	private JList<String> leftlist;
@@ -53,7 +56,7 @@ public class CurriculumData implements ActionListener, ItemListener{
 		frame.setLocationRelativeTo(null);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.add(new JLabel("Required Courses: "));
-		
+
 		selectedSemester = new JComboBox<String>(semesterSelection.toArray(new String[semesterSelection.size()]));
 		frame.add(selectedSemester);
 
@@ -106,6 +109,7 @@ public class CurriculumData implements ActionListener, ItemListener{
 
 		while(curriculumScan.hasNext()){
 			String line = curriculumScan.nextLine();
+			String lastCourseAdded = "";
 			if (line.toUpperCase().startsWith("First".toUpperCase()) || line.toUpperCase().startsWith("Second".toUpperCase()) 
 					|| line.toUpperCase().startsWith("Third".toUpperCase()) || line.toUpperCase().startsWith("Fourth".toUpperCase()) 
 					|| line.toUpperCase().startsWith("Fifth".toUpperCase())){
@@ -113,10 +117,7 @@ public class CurriculumData implements ActionListener, ItemListener{
 				coursePositionerList.add(coursePositionerToAdd);
 				individualSemesters.add(new LinkedList<String>());
 			}
-			else if(line.lastIndexOf(":") == line.length()-1){
-				continue;
-			}
-			else if (line.indexOf(":") == -1){
+			else if(line.lastIndexOf(":") == line.length()-1 || !line.contains(":")){
 				continue;
 			}
 			else if (line.startsWith("SOCIO")){
@@ -126,6 +127,7 @@ public class CurriculumData implements ActionListener, ItemListener{
 				coursesCodes.add("SOCIOXXXX" + "[" + sociocount + "]");
 				coursesCredits.add(Integer.parseInt(line.substring(line.lastIndexOf("-") + 2, line.lastIndexOf("-") + 3)));
 				totCredits += coursesCredits.get(coursesCredits.size() - 1);
+				lastCourseAdded = "SOCIOXXXX" + "[" + sociocount + "]";
 				sociocount++;
 			}
 			else if (line.startsWith("English")){
@@ -135,6 +137,7 @@ public class CurriculumData implements ActionListener, ItemListener{
 				coursesCodes.add("INGLXXXX" + "[" + inglcount + "]");
 				coursesCredits.add(Integer.parseInt(line.substring(line.indexOf("-") + 2, line.indexOf("-") + 3)));
 				totCredits += coursesCredits.get(coursesCredits.size() - 1);
+				lastCourseAdded = "INGLXXXX" + "[" + inglcount + "]";
 				inglcount++;
 			}
 			else{
@@ -144,12 +147,24 @@ public class CurriculumData implements ActionListener, ItemListener{
 				coursesCodes.add(line.substring(pos1, pos2));
 				coursesCredits.add(Integer.parseInt(line.substring(line.indexOf("-") + 2, line.indexOf("-") + 3)));
 				totCredits += coursesCredits.get(coursesCredits.size() - 1);
+				lastCourseAdded = line.substring(pos1, pos2);
 			}
 			coursePositionerToAdd++;
+
+			if(!line.contains("NONE") && !lastCourseAdded.isEmpty()){
+				prerequisites.put(lastCourseAdded, new ArrayList<String>());
+				if(line.endsWith(")")){prerequisites.get(lastCourseAdded).add(line.substring(line.length()-22, line.length()-14));}
+				else {prerequisites.get(lastCourseAdded).add(line.substring(line.length()-8));}
+				while(line.contains(",")){
+					line = line.substring(0, line.lastIndexOf(","));
+					if(line.endsWith(")")){prerequisites.get(lastCourseAdded).add(line.substring(line.length()-22, line.length()-14));}
+					else {prerequisites.get(lastCourseAdded).add(line.substring(line.length()-8));}
+				}
+			}
 		}
 
 		curriculumScan.close();
-		
+
 		//WARNING: Watch the first GitHub Commit to understand better what is happening on the following lines of code
 		for(LinkedList<String> currentSemester: individualSemesters){
 			int posNumber;
@@ -170,6 +185,7 @@ public class CurriculumData implements ActionListener, ItemListener{
 		coursesCredits = new LinkedList<>();
 		coursesNames = new LinkedList<>();
 		individualSemesters = new ArrayList<>();
+		prerequisites = new HashMap<String, ArrayList<String>>();
 		totCredits = 0;
 		takenCredits = 0;
 	}
@@ -178,8 +194,14 @@ public class CurriculumData implements ActionListener, ItemListener{
 	@SuppressWarnings("deprecation")
 	public void actionPerformed(ActionEvent event){
 		if(event.getSource() == markCourse){
+			ArrayList<String>noPrerequisite = new ArrayList<String>();
 			for(Object o: leftlist.getSelectedValues()){
-				takenCourses.add(o.toString());
+				if(hasPrerequisite(o.toString())) {
+					takenCourses.add(o.toString());
+				}else{
+					noPrerequisite.add(o.toString());
+				}
+
 			}
 			for(String course: takenCourses){
 				try{
@@ -196,7 +218,8 @@ public class CurriculumData implements ActionListener, ItemListener{
 					continue;
 				}
 			}
-			creditsRepresentation.setText(String.format("Curriculum Total Credits: %d Taken Credits: %d", totCredits, takenCredits));
+			if(noPrerequisite.isEmpty()) creditsRepresentation.setText(String.format("Curriculum Total Credits: %d Taken Credits: %d", totCredits, takenCredits));
+			else creditsRepresentation.setText("The following courses doesn't have the pre-requisites: " + noPrerequisite.toString());
 			itemStateChanged((ItemEvent)selectedSemester.getAction());
 		}
 		else if (event.getSource() == writeFile){
@@ -218,7 +241,7 @@ public class CurriculumData implements ActionListener, ItemListener{
 			}
 		}
 	}
-	
+
 	@Override
 	public void itemStateChanged(ItemEvent e) {
 		if(selectedSemester.getSelectedItem() != semesterSelection.get(0))
@@ -226,5 +249,16 @@ public class CurriculumData implements ActionListener, ItemListener{
 		else
 			leftlist.setListData(coursesCodes.toArray(new String[coursesCodes.size()]));
 		rightlist.setListData(takenCourses.toArray(new String[takenCourses.size()]));
+	}
+
+	public boolean hasPrerequisite(String course){
+		if(!prerequisites.containsKey(course)){
+			return true;
+		}
+		else{
+			for(String c: prerequisites.get(course)){
+				if(!takenCourses.contains(c)) return false;
+			}return true;
+		}
 	}
 }

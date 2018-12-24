@@ -29,7 +29,7 @@ Data Structures: CIIC4020 - 4					CIIC4010 & CIIC3075
 Physics II: FISI3172 - 4					FISI3171
 Physics Lab II: FISI3174 - 1					FISI3173 & FISI3172(Co-requisite)
 Electrical Systems Analysis I: INEL3105 - 3			MATE3032, FISI3172(Co-requisite) & MATE3063(Co-requisite)
-Electircal Measurements Lab: INEL4115 - 1			INEL3105 (Co-requisite)
+Electircal Measurements Lab: INEL4115 - 1			INEL3105(Co-requisite)
 English Second Year II: INGLXXXX - 3				INGL3104
 
 Third Year - Semester I:
@@ -41,7 +41,7 @@ SOCIO-HUMANISTIC ELECTIVE: - 3					NONE
 
 Third Year - Semester II:
 Algorithm Design and Analysis: CIIC4025 - 3			CIIC4020
-Computer Archietecture II: CIIC4082 - 3				CIIC3081		
+Computer Archietecture II: CIIC4082 - 3				CIIC3081
 Software Requirements: INSO4115 - 3				INSO4101
 Engineering Probability and Statistics: ININ4010 - 3		CIIC3011 & MATE3032
 SOCIO-HUMANISTIC ELECTIVE: - 3					NONE
@@ -62,7 +62,7 @@ SOCIO-HUMANISTIC ELECTIVE: - 3					NONE
 
 Fifth Year - Semester I:
 Software Engineering Project: INSO4151 - 3			INSO4117
-Engineering Matrials: INGE3045 - 3				QUIM3132, QUIM3134 & FISI3172 (Co-requisite)
+Engineering Matrials: INGE3045 - 3				QUIM3132, QUIM3134 & FISI3172(Co-requisite)
 Free Elective: FREEXXXX - 3					NONE
 Free Elective: FREEXXXX - 3					NONE
 Physical Education Elective: EDFIXXXX - 1			NONE
