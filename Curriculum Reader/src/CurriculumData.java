@@ -23,14 +23,16 @@ import javax.swing.ListSelectionModel;
 
 public class CurriculumData implements ActionListener, ItemListener{
 
-	private String fileName;
-	private LinkedList<String>coursesCodes;
-	private LinkedList<Integer>coursesCredits;
-	private LinkedList<String>coursesNames;
-	private LinkedList<String>semesterSelection;
-	private ArrayList<String>takenCourses;
-	private ArrayList<LinkedList<String>>individualSemesters;
-	private Map<String, ArrayList<String>> prerequisites;
+	private String fileName; //the name of the text file
+	private LinkedList<String>coursesCodes; //curriculum courses codes, one of the most valuable arrays that is going to be used for other arrays
+	private LinkedList<Integer>coursesCredits; //used to save the credits value for each class
+	private LinkedList<String>coursesNames; //used to save the class name
+	private LinkedList<String>semesterSelection; //used to select the semester in the jcombo box
+	private ArrayList<String>takenCourses; //courses that the individual has taken
+	private ArrayList<Integer>honorPoints;	//used to calculate gpa
+	private ArrayList<LinkedList<String>>individualSemesters; //saves the courses codes by semester
+	private Map<String, ArrayList<String>> prerequisites; //used to determine if the course can be added as "taken courses"
+	private Map<String, String>grades; //used to save the individual grades gotten in a course
 	private JFrame frame;
 	private JComboBox <String>selectedSemester;
 	private JList<String> leftlist;
@@ -40,8 +42,8 @@ public class CurriculumData implements ActionListener, ItemListener{
 	private JButton writeFile;
 	private JButton resetData;
 	private PrintWriter curriculumProgress;
-	private int totCredits;
-	private int takenCredits;
+	private int totCredits; //curriculum total credits
+	private int takenCredits; //taken credits by the individual
 
 	public CurriculumData(String fileName)throws FileNotFoundException{
 
@@ -185,7 +187,9 @@ public class CurriculumData implements ActionListener, ItemListener{
 		coursesCredits = new LinkedList<>();
 		coursesNames = new LinkedList<>();
 		individualSemesters = new ArrayList<>();
+		honorPoints = new ArrayList<>();
 		prerequisites = new HashMap<String, ArrayList<String>>();
+		grades = new HashMap<String, String>();
 		totCredits = 0;
 		takenCredits = 0;
 	}
@@ -207,6 +211,7 @@ public class CurriculumData implements ActionListener, ItemListener{
 				try{
 					int pos = coursesCodes.indexOf(course);
 					coursesCodes.remove(pos);
+					honorPoints.add(courseGrade(course) * coursesCredits.get(pos));
 					for(LinkedList<String> currentSemester: individualSemesters){
 						if (currentSemester.contains(course)){
 							currentSemester.remove(course);
@@ -218,7 +223,7 @@ public class CurriculumData implements ActionListener, ItemListener{
 					continue;
 				}
 			}
-			if(noPrerequisite.isEmpty()) creditsRepresentation.setText(String.format("Curriculum Total Credits: %d Taken Credits: %d", totCredits, takenCredits));
+			if(noPrerequisite.isEmpty()) creditsRepresentation.setText(String.format("Curriculum Total Credits: %d Taken Credits: %d GPA: %.2f", totCredits, takenCredits, getGPA(honorPoints)));
 			else creditsRepresentation.setText("The following courses doesn't have the pre-requisites: " + noPrerequisite.toString());
 			itemStateChanged((ItemEvent)selectedSemester.getAction());
 		}
@@ -260,5 +265,27 @@ public class CurriculumData implements ActionListener, ItemListener{
 				if(!takenCourses.contains(c)) return false;
 			}return true;
 		}
+	}
+
+	public int courseGrade(String course){
+		int honorPoints = -1;
+		String letterGrade = "";
+		while(!(honorPoints >= 0 && honorPoints <= 4)){
+			letterGrade = JOptionPane.showInputDialog(null, "Enter the grade you got in " + course + ':', "Course Grade");
+			if(letterGrade.equals("A")) honorPoints = 4;
+			else if(letterGrade.equals("B")) honorPoints = 3;
+			else if(letterGrade.equals("C")) honorPoints = 2;
+			else if(letterGrade.equals("D")) honorPoints = 1;
+			else if(letterGrade.equals("F")) honorPoints = 0;
+			else JOptionPane.showMessageDialog(null, "ERROR: Make sure you enter a valid grade (A, B, C, D or F)");
+		}
+		grades.put(course, letterGrade);
+		return honorPoints;
+	}
+
+	public double getGPA(ArrayList<Integer> honorPoints){
+		double gpa = 0;
+		for(Integer i: honorPoints){ gpa += i;}
+		return gpa/takenCredits;
 	}
 }
