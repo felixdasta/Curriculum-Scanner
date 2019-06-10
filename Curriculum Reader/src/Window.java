@@ -41,10 +41,10 @@ public class Window implements ActionListener, ItemListener{
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.add(new JLabel("Required Courses: "));
 
-		selectedSemester = new JComboBox<String>(curriculum.getSemesterSelection().toArray(new String[curriculum.getSemesterSelection().size()]));
+		selectedSemester = new JComboBox<String>(curriculum.getSemesters().keySet().toArray(new String[curriculum.getSemesters().size()]));
 		frame.add(selectedSemester);
 
-		leftlist = new JList<String>(curriculum.getCoursesCodes().toArray(new String[curriculum.getCoursesCodes().size()]));
+		leftlist = new JList<String>(curriculum.getSemesters().get("All Semesters").toArray(new String[curriculum.getSemesters().get("All Semesters").size()]));
 		leftlist.setVisibleRowCount(4);
 		leftlist.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
 		leftlist.setFixedCellWidth(100);
@@ -81,10 +81,8 @@ public class Window implements ActionListener, ItemListener{
 
 	@Override
 	public void itemStateChanged(ItemEvent e) {
-		if(selectedSemester.getSelectedItem() != curriculum.getSemesterSelection().get(0))
-			leftlist.setListData(curriculum.getIndividualSemesters().get(curriculum.getSemesterSelection().indexOf(selectedSemester.getSelectedItem())-1).toArray(new String[curriculum.getIndividualSemesters().get(curriculum.getSemesterSelection().indexOf(selectedSemester.getSelectedItem())-1).size()]));
-		else
-			leftlist.setListData(curriculum.getCoursesCodes().toArray(new String[curriculum.getCoursesCodes().size()]));
+		int size = curriculum.getSemesters().get(selectedSemester.getSelectedItem().toString()).size(); //the list size;
+		leftlist.setListData(curriculum.getSemesters().get(selectedSemester.getSelectedItem().toString()).toArray(new String[size]));
 		rightlist.setListData(curriculum.getTakenCourses().toArray(new String[curriculum.getTakenCourses().size()]));
 	}
 
@@ -103,10 +101,10 @@ public class Window implements ActionListener, ItemListener{
 			}
 			for(String course: curriculum.getTakenCourses()){
 				try{
-					int pos = curriculum.getCoursesCodes().indexOf(course);
-					curriculum.getCoursesCodes().remove(pos);
+					int pos = curriculum.getSemesters().get("All Semesters").indexOf(course);
+					curriculum.getSemesters().get("All Semesters").remove(pos);
 					curriculum.totHonorPoints += curriculum.courseGrade(course) * curriculum.getCoursesCredits().get(pos);
-					for(LinkedList<String> currentSemester: curriculum.getIndividualSemesters()){
+					for(LinkedList<String> currentSemester: curriculum.getSemesters().values()){
 						if (currentSemester.contains(course)){
 							currentSemester.remove(course);
 						}
@@ -125,7 +123,7 @@ public class Window implements ActionListener, ItemListener{
 				PrintWriter curriculumProgress = new PrintWriter("My Curriculum Progress.txt");
 				String name = JOptionPane.showInputDialog("Enter your name:");
 				String id = JOptionPane.showInputDialog("Enter your student ID:");
-				
+
 				while(id.length() != 11){
 					id = JOptionPane.showInputDialog("INVALID STUDENT ID - Make sure you type it correctly:");
 					try{
@@ -134,7 +132,7 @@ public class Window implements ActionListener, ItemListener{
 						continue;
 					}
 				}
-				
+
 				curriculumProgress.println("STUDENT NAME: " + name);
 				curriculumProgress.println("STUDENT ID: " + id);
 				curriculumProgress.println(String.format("GPA: %.2f", curriculum.getGPA()));

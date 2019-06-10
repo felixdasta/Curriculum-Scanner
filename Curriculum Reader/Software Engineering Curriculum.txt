@@ -73,5 +73,3 @@ Technical Elective:INSOXXXX - 3					NONE
 Free Elective: FREEXXXX - 3					NONE
 Free Elective: FREEXXXX - 3					NONE
 Physical Education Elective: EDFIXXXX - 1			NONE
-
-Taken Courses:
